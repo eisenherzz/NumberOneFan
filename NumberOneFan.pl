@@ -8,13 +8,14 @@ use Data::Dumper;
 use File::Path qw(make_path remove_tree);
 
 my $client_id = "12345678";
-my $artist_id = "eisenherzz";
-my $datefrom = "2017-05-01";
+my $artist_id = "YourName";
+my $datefrom = "2017-01-01";
 my $dateto = "2017-12-31";
+my $condate= "$datefrom"."_$dateto";
 
 sub getAlbumOfArtist {
 	my $url =
-"https://api.jamendo.com/v3.0/albums/?client_id=$client_id&format=xml&datebetween=$datefrom._$dateto&limit=all&artist_id=@_";
+"https://api.jamendo.com/v3.0/albums/?client_id=$client_id&format=xml&datebetween=$condate&limit=all&artist_id=@_";
 	print "getting album(s) of artist @_ from Jamendo \n";
 	my $response = get $url;
 	die "Error getting $url" unless defined $response;
