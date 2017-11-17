@@ -39,7 +39,7 @@ sub getAlbumOfArtist {
 
 sub getTracksOfArtist {
 	my $url =
-"https://api.jamendo.com/v3.0/tracks/?client_id=$client_id&format=xml&datebetween=$condate&limit=all&artist_id=@_";
+"https://api.jamendo.com/v3.0/tracks/?client_id=$client_id&format=xml&datebetween=$condate&limit=all&type=single&artist_id=@_";
 	print "getting track(s) of artist @_ from Jamendo \n";
 	my $response = get $url;
 	die "Error getting $url" unless defined $response;

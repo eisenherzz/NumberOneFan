@@ -1,6 +1,6 @@
 # NumberOneFan
 
-On Jamendo I follow different artists. Unfortunately there is no way to get automatically informed when one of those artists releases a new Album/Track.
+On Jamendo I follow different artists. Unfortunately there is no way to get automatically informed when one of those artists releases a new album/track.
 
 This script fetches all/in a given timeframe albums/tracks using the Jamendo Api.
 
