@@ -37,6 +37,30 @@ sub getAlbumOfArtist {
 	return (@albums);
 }
 
+sub getTracksOfArtist {
+	my $url =
+"https://api.jamendo.com/v3.0/tracks/?client_id=$client_id&format=xml&datebetween=$condate&limit=all&artist_id=@_";
+	print "getting track(s) of artist @_ from Jamendo \n";
+	my $response = get $url;
+	die "Error getting $url" unless defined $response;
+
+	my $xml    = new XML::Simple( KeyAttr => {track => 'id'} );
+	my $data   = $xml->XMLin($response, ForceArray => ['track']);
+	my @tracks = ();
+
+	foreach my $tracks ( keys %{ $data->{results}->{tracks}->{track} } ) {
+		push( @tracks, $tracks );
+		print "TRACKS : " . $tracks . "\n";
+	}
+
+	#print Dumper($data);
+	open( TXT, ">getTracksOfArtist.txt" );
+	print TXT Dumper($data);
+	close TXT;
+
+	return (@tracks);
+}
+
 sub getfanOfArtistID {
 	my $url =
 	"https://api.jamendo.com/v3.0/users/artists/?client_id=$client_id&format=xml&limit=all&name=@_";
@@ -69,6 +93,14 @@ sub downloadAlbumOfArtist {
 
 }
 
+sub downloadTrackOfArtist {
+	my $url =
+	  "https://api.jamendo.com/v3.0/tracks/file?client_id=$client_id&id=$_[0]&audioformat=mp32";
+	print "downloading track $_[0] of Artist $_[1] from Jamendo \n";
+	getstore( $url, "$_[1]/$_[0].mp3" );
+
+}
+
 #main script
 my @fanOf = &getfanOfArtistID($artist_id);
 
@@ -78,5 +110,10 @@ my @albums = &getAlbumOfArtist("$fanOf");
 foreach (@albums) {
 	print "Artist Id : " . $fanOf . " Album : " . $_ . "\n";
 	&downloadAlbumOfArtist($_, $fanOf);
+}
+my @tracks = &getTracksOfArtist("$fanOf");
+foreach (@tracks) {
+	print "Artist Id : " . $fanOf . " Track : " . $_ . "\n";
+	&downloadTrackOfArtist($_, $fanOf);
 }
 }
